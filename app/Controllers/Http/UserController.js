@@ -1,0 +1,108 @@
+'use strict'
+
+const User = use('App/Models/User');
+const { validateAll } = use('Validator')
+
+class UserController {
+    async store({request, response}) {
+        try {
+
+            /*
+            const validation = await validateAll(request.all(), {
+                username : 'required|min:5|unique:users',
+                email: 'required|email|unique:users',
+                password:'required|min:6',
+                //name: 'required',
+                cpf_cnpj:'required|unique:users',
+                type: 'required'
+            },errorMessage)
+
+            if (validation.fails()){
+                return response.status(401).send({message: validation.messages()})
+            }
+
+            */
+            const data = request.only(['username', 'email','password', 'cpf_cnpj','type']);
+
+            const user = await User.create(data);
+
+            return user;
+        } catch (error) {
+            return response.status(500).send({error: 'Error: '+error.message})
+        }
+    }
+
+    async index({request, response}) {
+        try {
+        
+            const users = await User.all();
+
+            return users;
+        } catch (error) {
+            return response.status(500).send({error: 'Error: '+error.message})
+        }
+    }
+
+    async login({request, response, auth}) {
+
+        try {
+            const {email, password} = request.all();
+            const token = await auth.attempt(email, password );
+
+            return token;
+        } catch (error) {
+            return response.status(500).send({error: 'Error: '+error.message}) 
+        }
+    }
+
+
+    async show({auth, params , response}) {
+
+        try {
+            if (auth.user.id !== Number(params.id)) {
+                return response.status(400).send({error: "Error: You cannot see someone else's profile"}) 
+            }
+
+            return auth.user
+        } catch (error) {
+            return response.status(500).send({error: 'Error: '+error.message}) 
+        }
+        
+    }
+
+    async update ({ params, request, response , auth}) {
+        
+        try{
+            if (auth.user.id !== Number(params.id)) {
+                return response.status(400).send({error: "Error: You cannot see someone else's profile"}) 
+            }
+
+            const data = request.only(['username', 'email','password', 'cpf_cnpj','type']);
+
+            let user  = auth.user;
+            
+            
+            if (!data){
+            return response.status(404).send({error: "this item is not found"});
+            }
+            
+            user.username = data.username;
+            user.email = data.email;
+            user.password = data.password;
+            user.cpf_cnpj = data.cpf_cnpj;
+            user.type = data.type;        
+        
+            await user.save();
+        
+            return user;
+        }catch(error){
+            return response.status(500).send({error: 'Error: '+error.message}) 
+        }
+        
+      }
+       
+}
+
+
+
+module.exports = UserController
