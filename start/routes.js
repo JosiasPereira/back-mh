@@ -23,7 +23,7 @@ Route.post('user/:id', 'UserController.update').middleware('auth')
 
 Route.post('/login', 'UserController.login');
 
-Route.post('/receipt', 'ReceiptController.store').middleware('auth');
+Route.post('/receipt', 'ReceiptController.store');//.middleware('auth');
 Route.get('/receipt', 'ReceiptController.index').middleware('auth');
-Route.post('/receipt/:id/file', 'ReceiptFileController.store').middleware('auth');
+//Route.post('/receipt/:id/file', 'ReceiptFileController.store').middleware('auth');
 

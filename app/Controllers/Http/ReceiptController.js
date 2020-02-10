@@ -10,6 +10,7 @@
 
 const Receipt = use('App/Models/Receipt');
 const Helpers = use('Helpers');
+const getStream = use("get-stream");
 
 class ReceiptController {
   /**
@@ -28,8 +29,11 @@ class ReceiptController {
 
     const receipts = await Receipt.query()
       .where('user_recipient_id', id )
+      .with('usersIssuer')
+      .with('usersRecipient')
       .fetch();
 
+    //await receipts.load('users');
     return receipts;
   }
 
@@ -44,44 +48,41 @@ class ReceiptController {
    */
   async store ({ request, response }) {
     try {
+  
 
       const data = request.only(['user_issuer_id', 'user_recipient_id','value', 'comment']);
 
-      const receipt = await Receipt.create(data);
-      return receipt;
 
-      /*
-      const files = request.file('file',{
-        size: '50mb'
+      const file = request.file('file',{
+        size: '50mb',
+        types: ['image']
       });
 
-      await files.moveAll(Helpers.tmpPath('upload/receipt'), file =>({
-        //name: new Date.toString + file.clientName
-        name: Date.now()+'-'+file.clientName
-      }));
+      const newFileName = Date.now()+'-'+file.clientName;
 
-      if (!files.movedAll()){
-        return files.erros();
+      await file.move(Helpers.tmpPath('upload/receipt'), {
+        name: newFileName        
+      });
+
+      if (!file.moved()){
+        return file.erros();
       }
 
       
+      data.path = newFileName; 
+      
+      const receipt = await Receipt.create(data);
+      
+      return receipt;
 
-      await Promise.all(
-        files
-            .movedList()
-            .map((item) => {
-              data.path = item.fileName; 
-              Receipt.create(data)
-            })
-    )
-
-      return response.status(200).send({message: 'image has been uploaded'});
-      */
 
   } catch (error) {
       return response.status(500).send({error: 'Error: '+error.message})
+    }
   }
-  }
+
+
+  
 
   /**
    * Display a single receipt.

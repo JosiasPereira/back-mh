@@ -33,7 +33,7 @@ class ReceiptFileController {
                     receipt.path = item.fileName; 
                     receipt.save()
                 })
-        )
+          )
     
           return response.status(200).send({message: 'image has been uploaded'});
         
