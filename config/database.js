@@ -73,7 +73,7 @@ module.exports = {
   | npm i --save pg
   |
   */
- /* OLD - JOSIAS
+
   pg: {
     client: 'pg',
     connection: {
@@ -84,9 +84,9 @@ module.exports = {
       database: Env.get('DB_DATABASE', 'adonis')
     },
     debug: Env.get('DB_DEBUG', false)
-  }
-  */
-  pg: {
+  },
+  
+  pg_heroku: {
     client: 'pg',
     connection: {
       host: Env.get('DB_HOST', CLEARDB_DATABASE_URL.host),
