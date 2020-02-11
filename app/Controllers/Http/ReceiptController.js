@@ -10,7 +10,8 @@
 
 const Receipt = use('App/Models/Receipt');
 const Helpers = use('Helpers');
-const getStream = use("get-stream");
+const base64 = require('../../../config/base64');
+
 
 class ReceiptController {
   /**
@@ -26,6 +27,11 @@ class ReceiptController {
     const id = auth.user.id;
 
 
+    //const img = base64.encode_base64('/josias.png');
+    //console.log(img);
+
+    //return response.status(200).send(img);
+    
 
     const receipts = await Receipt.query()
       .where('user_recipient_id', id )
@@ -71,8 +77,11 @@ class ReceiptController {
       
       data.path = newFileName; 
       
-      const receipt = await Receipt.create(data);
       
+      const receipt = await Receipt.create(data);
+      receipt.url = `/receipt/${receipt.id}/file`;
+      receipt.save();
+
       return receipt;
 
 
