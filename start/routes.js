@@ -24,7 +24,7 @@ Route.post('user/:id', 'UserController.update');//.middleware('auth')
 Route.post('/login', 'UserController.login');
 
 Route.post('/receipt', 'ReceiptController.store');//.middleware('auth');
-Route.get('/receipt', 'ReceiptController.index').middleware('auth');
+Route.get('/receipt/:id', 'ReceiptController.index2');//.middleware('auth');
 Route.get('/receipt/:id/file', 'ReceiptFileController.show');//.middleware('auth');
 //Route.post('/receipt/:id/file', 'ReceiptFileController.store').middleware('auth');
 

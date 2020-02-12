@@ -42,6 +42,26 @@ class ReceiptController {
     //await receipts.load('users');
     return receipts;
   }
+  async index2 ({ request, response, params }) {
+    const id = params.id;
+
+
+    //const img = base64.encode_base64('/josias.png');
+    //console.log(img);
+
+    //return response.status(200).send(img);
+    
+
+    const receipts = await Receipt.query()
+      .where('user_recipient_id', id )
+      .with('usersIssuer')
+      .with('usersRecipient')
+      .fetch();
+
+    //await receipts.load('users');
+    return receipts;
+  }
+
 
 
   /**
