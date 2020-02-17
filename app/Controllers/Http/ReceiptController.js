@@ -72,11 +72,11 @@ class ReceiptController {
    * @param {Request} ctx.request
    * @param {Response} ctx.response
    */
-  async store ({ request, response }) {
+  async store ({ request, response, auth }) {
     try {
-  
 
-      const data = request.only(['user_issuer_id', 'user_recipient_id','value', 'comment']);
+      //const data = request.only(['user_issuer_id', 'user_recipient_id','value', 'comment']);
+      const data = request.only(['user_recipient_id','value', 'comment']);
 
 
       const file = request.file('file',{
@@ -96,7 +96,7 @@ class ReceiptController {
 
       
       data.path = newFileName; 
-      
+      data.user_issuer_id = auth.user.id;
       
       const receipt = await Receipt.create(data);
       receipt.url = `/receipt/${receipt.id}/file`;
@@ -106,6 +106,7 @@ class ReceiptController {
 
 
   } catch (error) {
+      console.log(error.message)
       return response.status(500).send({error: 'Error: '+error.message})
     }
   }

@@ -55,6 +55,17 @@ class UserController {
         }
     }
 
+    async revokeUserToken ({ auth }) {
+        const user = auth.current.user
+        const token = auth.getAuthHeader()
+    
+        await user
+          .tokens()
+          .where('token', token)
+          .update({ is_revoked: true })
+        
+        return response.status(200).send({message: 'the token has been revoked'}) 
+      }
 
     async show({auth, params , response}) {
 
@@ -69,6 +80,20 @@ class UserController {
         }
         
     }
+
+    async validToken({auth , request, response}) {
+
+        try {
+            
+            const user = await auth.getUser();
+
+            return user
+        } catch (error) {
+            return response.status(400).send({error: 'Error: Missing or invalid jwt token'}) 
+        }
+        
+    }
+    
 
     async update ({ params, request, response , auth}) {
         
