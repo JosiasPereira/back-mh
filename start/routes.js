@@ -17,9 +17,9 @@
 const Route = use('Route')
 
 Route.post('/user', 'UserController.store' );
-Route.get('/user', 'UserController.index' );
-Route.get('user/:id', 'UserController.show');//.middleware('auth')
-Route.post('user/:id', 'UserController.update');//.middleware('auth')
+Route.get('/user', 'UserController.index' ).middleware('auth');
+Route.get('user/:id', 'UserController.show').middleware('auth')
+Route.post('user/:id', 'UserController.update').middleware('auth')
 
 Route.post('/login', 'UserController.login');
 Route.post('/signout', 'UserController.signout');

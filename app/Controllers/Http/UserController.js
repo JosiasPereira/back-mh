@@ -7,21 +7,23 @@ class UserController {
     async store({request, response}) {
         try {
 
-            /*
+            const validateMessages = {
+                'email.unique': 'Já existe um usuário com esse e-mail cadastrato.',
+                'cpf_cnpj.unique': 'Já existe um usuário com esse CPF/CNPJ cadastrato.',
+            }
             const validation = await validateAll(request.all(), {
-                username : 'required|min:5|unique:users',
+                username : 'required|min:5',
                 email: 'required|email|unique:users',
-                password:'required|min:6',
-                //name: 'required',
+                password:'required|min:6',            
                 cpf_cnpj:'required|unique:users',
                 type: 'required'
-            },errorMessage)
+            }, validateMessages)
 
             if (validation.fails()){
-                return response.status(401).send({message: validation.messages()})
+                return response.status(400).send({validate: validation.messages()})
             }
 
-            */
+            
             const data = request.only(['username', 'email','password', 'cpf_cnpj','type']);
 
             const user = await User.create(data);
@@ -51,7 +53,7 @@ class UserController {
 
             return token;
         } catch (error) {
-            return response.status(500).send({error: 'Error: '+error.message}) 
+            return response.status(401).send({validate: 'Verifique o e-mail e senha e tente novamente.'}) 
         }
     }
 
