@@ -11,7 +11,7 @@ module.exports ={
  */
   encode_base64(filename) {
 
-    var bitmap = fs.readFileSync(path.join(Helpers.tmpPath('upload/receipt/'), filename));
+    var bitmap = fs.readFileSync(path.join(Helpers.publicPath('upload/receipt/'), filename));
     let buf =   Buffer.from(bitmap);
     let base64 =  buf.toString('base64');
     return base64;
@@ -38,7 +38,7 @@ module.exports ={
   decode_base64(base64str, filename) {
     let buf = Buffer.from(base64str, 'base64');
   
-    fs.writeFile(path.join(Helpers.tmpPath('upload/receipt/'), filename), buf, function(error) {
+    fs.writeFile(path.join(Helpers.publicPath('upload/receipt/'), filename), buf, function(error) {
       if (error) {
         throw error;
       } else {
