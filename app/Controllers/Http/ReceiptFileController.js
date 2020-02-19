@@ -58,7 +58,7 @@ class ReceiptFileController {
       const img = base64.encode_base64(receipt.path);
       
       // send image raw
-      return response.download(Helpers.tmpPath('upload/receipt/'+receipt.path));
+      return response.download(Helpers.publicPath('upload/receipt/'+receipt.path));
 
       //send image as base64
       //return response.status(200).send('data:png;base64,'+img);  

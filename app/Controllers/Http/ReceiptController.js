@@ -86,7 +86,7 @@ class ReceiptController {
 
       const newFileName = Date.now()+'-'+file.clientName;
 
-      await file.move(Helpers.tmpPath('upload/receipt'), {
+      await file.move(Helpers.publicPath('upload/receipt'), {
         name: newFileName        
       });
 
